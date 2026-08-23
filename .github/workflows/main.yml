@@ -1,8 +1,11 @@
 # .github/workflows/main.yml
+name: Auto Graph Contribution
 
 on:
   schedule:
-  - cron: '*/6 * * * *'
+    # Runs 10 times a day at 43 minutes past the hour during non-peak UTC times
+    - cron: '43 1,3,5,7,9,13,15,17,19,21 * * *'
+  workflow_dispatch: # Allows manual trigger from the GitHub Actions dashboard
 
 jobs:
   single-commit:
@@ -10,7 +13,11 @@ jobs:
     permissions:
       contents: write
     steps:
-    - uses: bcanseco/github-contribution-graph-action@v2
+    - name: Checkout repository
+      uses: actions/checkout@v4 # Required to allow git actions to modify the repo history
+
+    - name: Update Contribution Graph
+      uses: bcanseco/github-contribution-graph-action@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GIT_EMAIL: wearecare098@gmail.com
